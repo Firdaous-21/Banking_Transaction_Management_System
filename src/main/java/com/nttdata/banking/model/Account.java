@@ -1,6 +1,5 @@
 package com.nttdata.banking.model;
 
-import com.nttdata.banking.model.enumiration.AccountType;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,20 +10,19 @@ public class Account {
     private long accountId;
     private String accountHolderName;
 
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
+
+    private String accountType;
 
     private double balance;
     private double iban;
 
-    @OneToMany
-    @JoinColumn(name = "transaction_Id")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
     public Account() {
     }
 
-    public Account(long accountId, String accountHolderName, AccountType accountType, double balance, double iban, List<Transaction> transactions) {
+    public Account(long accountId, String accountHolderName, String accountType, double balance, double iban, List<Transaction> transactions) {
         this.accountId = accountId;
         this.accountHolderName = accountHolderName;
         this.accountType = accountType;
@@ -49,11 +47,11 @@ public class Account {
         this.accountHolderName = accountHolderName;
     }
 
-    public AccountType getAccountType() {
+    public String getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(AccountType accountType) {
+    public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
 
