@@ -2,15 +2,19 @@ package com.nttdata.banking.controller;
 
 import com.nttdata.banking.model.Account;
 import com.nttdata.banking.service.AccountService;
+import com.nttdata.banking.service.implementation.BankingLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *
+ */
 @RestController
 @RequestMapping("/account")
-public class AccountController {
+public class AccountController implements BankingLogger {
 
     private AccountService accountService;
     @Autowired
@@ -24,8 +28,10 @@ public class AccountController {
      * @param account : Account
      * @return Account
      */
-    @PostMapping
-    public Account createAccount(@RequestBody Account account) {
+    @PostMapping("/save")
+    public Account createAccount( @RequestBody Account account) {
+        LOGGER.info("account supposed to be created");
+        System.out.println(account.toString());
         return accountService.saveAccount(account);
     }
 
@@ -36,21 +42,39 @@ public class AccountController {
      */
     @GetMapping
     public List<Account> getAllAccounts() {
+        LOGGER.info("Accounts List to be displayed");
         return accountService.getAllAccounts();
     }
 
+    /**
+     * Get the account using the id account provided as a parameter
+     * @param id: long
+     * @return Optional<Account>
+     */
     @GetMapping("/{id}")
     public Optional<Account> getAccountService(@PathVariable long id) {
+        LOGGER.info("Account to be displayed");
        return accountService.getAccountById(id);
     }
 
+    /**
+     * Update the account
+     * @param account: Account
+     * @return Account
+     */
     @PutMapping
     public Account updateAccount(@RequestBody Account account) {
+        LOGGER.info("Account to be updated");
         return accountService.updateAccount(account);
     }
 
-    @DeleteMapping
+    /**
+     * Delete the account using the id provided as a parameter
+     * @param id: long
+     */
+    @DeleteMapping("/{id}")
     public void deleteAccount(@PathVariable long id) {
+        LOGGER.info("Account to be deleted");
         accountService.deleteAccount(id);
     }
 }
